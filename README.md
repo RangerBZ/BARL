@@ -20,5 +20,16 @@ pip install -e .
 bash train_barl.sh
 ```
 
+## Citation
+
+```bibtex
+@article{zhang2025beyond,
+  title={Beyond Markovian: Reflective Exploration via Bayes-Adaptive RL for LLM Reasoning},
+  author={Zhang, Shenao and Wang, Yaqing and Liu, Yinxiao and Liu, Tianqi and Grabowski, Peter and Ie, Eugene and Wang, Zhaoran and Li, Yunxuan},
+  journal={arXiv preprint arXiv:2505.20561},
+  year={2025}
+}
+```
+
 ## Acknowledgement
 This repository is built upon the OpenRLHF framework. We thank the authors for their great work.
