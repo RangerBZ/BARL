@@ -1,7 +1,7 @@
 
 # Bayes-Adaptive RL for LLM Reasoning
 
-Code for Beyond Markovian: Reflective Exploration via Bayes-Adaptive RL for LLM Reasoning.
+Code for [Beyond Markovian: Reflective Exploration via Bayes-Adaptive RL for LLM Reasoning](https://arxiv.org/abs/2505.20561).
 
 Authors: [Shenao Zhang](https://shenao-zhang.github.io)¹, [Yaqing Wang](https://yaqingwang.github.io/)², [Yinxiao Liu](https://scholar.google.com/citations?user=c7HKsEsAAAAJ&hl=en)², [Tianqi Liu](https://scholar.google.com/citations?user=pUKhiMIAAAAJ&hl=en)², [Peter Grabowski](https://scholar.google.com/citations?user=c9APALsAAAAJ&hl=en)³, [Eugene Ie](https://scholar.google.com/citations?user=jNCbl2IAAAAJ&hl=en)³, [Zhaoran Wang](https://zhaoranwang.github.io)¹, [Yunxian Li](https://scholar.google.com/citations?user=Nun8Dy0AAAAJ&hl=en)³.
 
