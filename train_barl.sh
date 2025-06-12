@@ -27,6 +27,22 @@ openrlhf.cli.train_barl \
    --n_samples_per_prompt 5
 EOF
 
-if [[ ${1} != "slurm" ]]; then
-    deepspeed --include localhost:0,1,2,3,4,5,6,7 --module $training_commands
+# if [[ ${1} != "slurm" ]]; then
+#     deepspeed --include localhost:0,1,2,3,4,5,6,7 --module $training_commands
+# fi
+
+if [[ "${1}" != "slurm" ]]; then
+    # number of available GPUs
+    NUM_GPUS=$(nvidia-smi --query-gpu=name --format=csv | tail -n +2 | wc -l)
+
+    if [[ "$NUM_GPUS" -eq 0 ]]; then
+        echo "No GPUs available."
+        exit 1
+    fi
+
+    GPU_LIST=$(seq -s, 0 $((NUM_GPUS - 1)))
+    deepspeed --include localhost:${GPU_LIST} --module $training_commands
 fi
+
+# also needs hugging face login:
+# possible conflicts: flash-attn and CUDA, build from source: pip install git+https://github.com/Dao-AILab/flash-attention.git 

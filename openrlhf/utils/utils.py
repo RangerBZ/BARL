@@ -79,11 +79,11 @@ def blending_datasets(
             strategy.print(f"loaded {dataset} with data_files={dataset}")
         # local dataset saved with `datasets.Dataset.save_to_disk`
         elif os.path.isdir(dataset):
-            data = load_dataset(dataset)
+            data = load_dataset(dataset, cache_dir="", keep_in_memory=True)
             strategy.print(f"loaded {dataset} from disk")
         # remote/local folder or common file
         else:
-            data = load_dataset(dataset, data_dir=data_dir)
+            data = load_dataset(dataset, data_dir=data_dir, cache_dir="", keep_in_memory=True)
             strategy.print(f"loaded {dataset} from files")
 
         if train_split and train_split in data:
