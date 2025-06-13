@@ -72,7 +72,7 @@ def blending_datasets(
         if ext == ".py" or (
             os.path.isdir(dataset) and os.path.exists(os.path.join(dataset, f"{dataset_basename}.py"))
         ):
-            data = load_dataset(dataset, trust_remote_code=True, cache_dir="", keep_in_memory=True)
+            data = load_dataset(dataset, trust_remote_code=True, cache_dir="", keep_in_memory=True, split="train[:100%]")
             strategy.print(f"loaded {dataset} with python script")
         # local text file
         elif ext in [".json", ".jsonl", ".csv"]:
@@ -80,15 +80,15 @@ def blending_datasets(
             if ext == "jsonl":
                 ext = "json"
             data = load_dataset(ext, data_files=dataset, cache_dir="",     # Disable cache
-        keep_in_memory=True, load_from_cache_file=False)
+        keep_in_memory=True, load_from_cache_file=False, split="train[:100%]")
             strategy.print(f"loaded {dataset} with data_files={dataset}")
         # local dataset saved with `datasets.Dataset.save_to_disk`
         elif os.path.isdir(dataset):
-            data = load_dataset(dataset, cache_dir="", keep_in_memory=True)
+            data = load_dataset(dataset, cache_dir="", keep_in_memory=True, split="train[:100%]")
             strategy.print(f"loaded {dataset} from disk")
         # remote/local folder or common file
         else:
-            data = load_dataset(dataset, data_dir=data_dir, cache_dir="", keep_in_memory=True)
+            data = load_dataset(dataset, data_dir=data_dir, cache_dir="", keep_in_memory=True, split="train[:100%]")
             strategy.print(f"loaded {dataset} from files")
 
         if train_split and train_split in data:
