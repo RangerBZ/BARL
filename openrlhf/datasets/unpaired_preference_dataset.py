@@ -4,7 +4,10 @@ import torch
 from torch.utils.data import Dataset
 
 from .utils import zero_pad_sequences
+import os
 
+num_gpus = int(os.getenv("NUM_GPUS", "1"))  # Default to 1 if not set
+num_proc = min(num_gpus * 2, 8)
 
 def preprocess_data(
     data, input_template=None, input_key=None, output_key=None, label_key=None, apply_chat_template=None
@@ -43,7 +46,7 @@ class UnpairedPreferenceDataset(Dataset):
     """
 
     def __init__(
-        self, dataset, tokenizer: Callable, max_length: int, strategy, input_template=None, num_processors=8
+        self, dataset, tokenizer: Callable, max_length: int, strategy, input_template=None, num_processors=num_proc
     ) -> None:
         super().__init__()
         self.tokenizer = tokenizer
@@ -65,7 +68,8 @@ class UnpairedPreferenceDataset(Dataset):
 
         # Parallel loading datasets
         processed_dataset = dataset.map(
-            self.process_data, remove_columns=dataset.column_names, num_proc=num_processors
+            self.process_data, remove_columns=dataset.column_names, num_proc=num_processors,                     # Don't use multiprocessing
+    load_from_cache_file=False 
         )
 
         # Filter out None values if necessary

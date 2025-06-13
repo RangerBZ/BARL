@@ -5,7 +5,10 @@ import torch.nn.functional as F
 from torch.utils.data import Dataset
 
 from .utils import zero_pad_sequences
+import os
 
+num_gpus = int(os.getenv("NUM_GPUS", "1"))  # Default to 1 if not set
+num_proc = min(num_gpus * 2, 8)
 
 def preprocess_data(data, input_template=None, input_key="input", output_key=None, apply_chat_template=None):
     if apply_chat_template:
@@ -49,7 +52,7 @@ class SFTDataset(Dataset):
         strategy,
         input_template=None,
         pretrain_mode=False,
-        num_processors=8,  # Specify the number of processors you want to use
+        num_processors=num_proc,  # Specify the number of processors you want to use
         multiple_of=1,
     ) -> None:
         super().__init__()
@@ -73,7 +76,8 @@ class SFTDataset(Dataset):
 
         # Parallel loading datasets
         processed_dataset = dataset.map(
-            self.process_data, remove_columns=dataset.column_names, num_proc=num_processors
+            self.process_data, remove_columns=dataset.column_names, num_proc=num_processors,                      # Don't use multiprocessing
+    load_from_cache_file=False 
         )
         processed_dataset = processed_dataset.filter(lambda x: x["prompt"] is not None)
 

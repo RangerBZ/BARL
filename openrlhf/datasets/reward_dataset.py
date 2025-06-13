@@ -5,7 +5,10 @@ import torch.nn.functional as F
 from torch.utils.data import Dataset
 
 from .utils import exist_and_not_none, zero_pad_sequences
+import os
 
+num_gpus = int(os.getenv("NUM_GPUS", "1"))  # Default to 1 if not set
+num_proc = min(num_gpus * 2, 8)
 
 def preprocess_data(
     data,
@@ -64,7 +67,7 @@ class RewardDataset(Dataset):
         strategy,
         input_template=None,
         is_dpo=False,
-        num_processors=8,
+        num_processors=num_proc,
         multiple_of=1,
     ) -> None:
         super().__init__()
@@ -89,7 +92,8 @@ class RewardDataset(Dataset):
 
         # Parallel loading datasets
         processed_dataset = dataset.map(
-            self.process_data, remove_columns=dataset.column_names, num_proc=num_processors
+            self.process_data, remove_columns=dataset.column_names, num_proc=num_processors,                      # Don't use multiprocessing
+    load_from_cache_file=False
         )
 
         # Filter out None values if necessary
