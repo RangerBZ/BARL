@@ -1,14 +1,15 @@
 import os
 
-from datasets import interleave_datasets, load_dataset, load_from_disk
+from datasets import interleave_datasets, load_dataset, load_from_disk, disable_caching
 from transformers import AutoTokenizer
 
-
+os.environ["HF_DATASETS_DISABLE_CACHE"] = "1"
 DEFAULT_PAD_TOKEN = "[PAD]"
 DEFAULT_EOS_TOKEN = "</s>"
 DEFAULT_BOS_TOKEN = "<s>"
 DEFAULT_UNK_TOKEN = "<unk>"
 ## for use in Colab
+disable_caching()
 
 cache_dir = "/content/drive/MyDrive/rlhf_cache"
 os.makedirs(cache_dir, exist_ok=True)
